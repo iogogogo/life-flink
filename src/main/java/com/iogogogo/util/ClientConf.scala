@@ -5,6 +5,7 @@ import java.util.Map.Entry
 import java.util.concurrent.ConcurrentHashMap
 
 import com.typesafe.config.{Config, ConfigFactory, ConfigValue}
+import org.apache.commons.lang3.StringUtils
 import org.slf4j.{Logger, LoggerFactory}
 
 /**
@@ -18,9 +19,9 @@ trait ClientConf[C <: ClientConf[C]] {
   def getConfigs(key: String, fileName: String = "application.properties"): ConcurrentHashMap[String, Any] = {
     val hashMap = new ConcurrentHashMap[String, Any]()
     try {
-      val config = loadFromResource(key, fileName)
+      val config: Config = loadFromResource(key, fileName)
       for (entry <- config.entrySet().toArray) {
-        val obj = entry.asInstanceOf[Entry[String, ConfigValue]]
+        val obj: Entry[String, ConfigValue] = entry.asInstanceOf[Entry[String, ConfigValue]]
         hashMap.put(obj.getKey, obj.getValue.unwrapped())
       }
     } catch {
@@ -43,6 +44,16 @@ trait ClientConf[C <: ClientConf[C]] {
       loadConfig(file).getConfig(key)
     } else {
       ConfigFactory.load(fileName).getConfig(key)
+    }
+  }
+
+  def loadConfig(fileName: String): Config = {
+    val name: String = if (StringUtils.isEmpty(fileName)) "application.properties" else fileName
+    val file = new File(".", name)
+    if (file.exists()) {
+      loadConfig(file)
+    } else {
+      ConfigFactory.load(name)
     }
   }
 
