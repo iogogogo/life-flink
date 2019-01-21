@@ -11,7 +11,10 @@
     <properties>
         <main.class>com.iogogogo.MainApplication</main.class>
         <flink.version>1.7.1</flink.version>
-        <scala.version>2.12.6</scala.version>
+        <scala.version>2.11.12</scala.version>
+        <scala.binary.version>2.11</scala.binary.version>
+        <lombok.version>1.18.4</lombok.version>
+        <typesafe.config.version>1.3.3</typesafe.config.version>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>${maven.compiler.source}</maven.compiler.target>
         <maven.build.timestamp.format>yyyyMMdd</maven.build.timestamp.format>
@@ -40,12 +43,12 @@
         </dependency>
         <dependency>
             <groupId>org.apache.flink</groupId>
-            <artifactId>flink-streaming-java_2.11</artifactId>
+            <artifactId>flink-streaming-java_${scala.binary.version}</artifactId>
             <version>${flink.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.flink</groupId>
-            <artifactId>flink-clients_2.11</artifactId>
+            <artifactId>flink-clients_${scala.binary.version}</artifactId>
             <version>${flink.version}</version>
         </dependency>
 
@@ -62,23 +65,30 @@
         </dependency>
         <dependency>
             <groupId>org.scala-lang.modules</groupId>
-            <artifactId>scala-java8-compat_2.12</artifactId>
+            <artifactId>scala-java8-compat_${scala.binary.version}</artifactId>
             <version>0.8.0</version>
         </dependency>
 
         <dependency>
             <groupId>com.typesafe</groupId>
             <artifactId>config</artifactId>
-            <version>1.3.3</version>
+            <version>${typesafe.config.version}</version>
         </dependency>
 
-
-        <!-- logback -->
+        <!-- logger -->
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
             <version>1.2.3</version>
         </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- test -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
