@@ -1,6 +1,9 @@
 package com.iogogogo.persistent;
 
+import org.apache.ibatis.annotations.Param;
+
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -30,6 +33,15 @@ public interface BaseMapper<PK extends Serializable, M extends Serializable> {
      * @return
      */
     int save(M m);
+
+    /**
+     * 批量保存
+     *
+     * @param data
+     * @param batchSize
+     * @return
+     */
+    int batchSave(Collection<M> data, @Param("batchSize") int batchSize);
 
     /**
      * 修改数据
