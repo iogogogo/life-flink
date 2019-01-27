@@ -25,12 +25,12 @@ public class KafkaSourceApp {
         props.put("key.serializer", KafkaConf$.MODULE$.keySerializer().get());
         //value 序列化
         props.put("value.serializer", KafkaConf$.MODULE$.valueSerializer().get());
-        props.put("zookeeper.connect", "192.168.1.101:2182,192.168.1.101:2183,192.168.1.101:2184");
+        props.put("zookeeper.connect",  KafkaConf$.MODULE$.zookeeperConnect().get());
         props.put("group.id", "metric-group");
         //key 反序列化
-        props.put("key.deserializer", KafkaConf$.MODULE$.keyDeserializer());
+        props.put("key.deserializer", KafkaConf$.MODULE$.keyDeserializer().get());
         //value 反序列化
-        props.put("value.deserializer", KafkaConf$.MODULE$.valueDeserializer());
+        props.put("value.deserializer", KafkaConf$.MODULE$.valueDeserializer().get());
         props.put("auto.offset.reset", "latest");
 
         DataStreamSource<String> dataStreamSource = environment
