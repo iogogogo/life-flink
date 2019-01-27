@@ -11,9 +11,6 @@ import java.util.List;
  */
 public class BeanMapper {
 
-    private final static Object _LOCK = new Object();
-
-
     private static volatile DozerBeanMapper dozer = null;
 
     /**
@@ -21,7 +18,7 @@ public class BeanMapper {
      */
     public static DozerBeanMapper getDozer() {
         if (dozer == null) {
-            synchronized (_LOCK) {
+            synchronized (BeanMapper.class) {
                 if (dozer == null) {
                     dozer = new DozerBeanMapper();
                 }

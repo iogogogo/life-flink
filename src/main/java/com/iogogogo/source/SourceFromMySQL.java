@@ -1,12 +1,15 @@
 package com.iogogogo.source;
 
-import com.iogogogo.conf.MySQLConf$;
+import com.iogogogo.mapper.EmployeeMapper;
 import com.iogogogo.model.Employee;
+import com.iogogogo.util.IoUtils;
+import com.iogogogo.persistent.SqlSessionFactoryHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.functions.source.RichSourceFunction;
+import org.apache.ibatis.session.SqlSession;
 
-import java.sql.*;
+import java.util.List;
 
 /**
  * CREATE TABLE `employee` (
@@ -23,8 +26,9 @@ import java.sql.*;
 @Slf4j
 public class SourceFromMySQL extends RichSourceFunction<Employee> {
 
-    private PreparedStatement ps;
-    private Connection connection;
+
+    private EmployeeMapper employeeMapper;
+    private SqlSession session;
 
     /**
      * open() 方法中建立连接，这样不用每次 invoke 的时候都要建立连接和释放连接。
@@ -35,11 +39,8 @@ public class SourceFromMySQL extends RichSourceFunction<Employee> {
     @Override
     public void open(Configuration parameters) throws Exception {
         super.open(parameters);
-        Class.forName("com.mysql.jdbc.Driver");
-        connection = DriverManager.getConnection(MySQLConf$.MODULE$.url(), MySQLConf$.MODULE$.username(), MySQLConf$.MODULE$.password());
-        log.info("open mysql connection...");
-        String sql = "select * from employee;";
-        ps = connection.prepareStatement(sql);
+        session = SqlSessionFactoryHelper.openSqlSession();
+        employeeMapper = session.getMapper(EmployeeMapper.class);
     }
 
     /**
@@ -51,14 +52,8 @@ public class SourceFromMySQL extends RichSourceFunction<Employee> {
     public void close() throws Exception {
         super.close();
         log.info("release resource close");
-        if (ps != null) {
-            ps.close();
-            ps = null;
-        }
-        if (connection != null) {
-            connection.close();
-            connection = null;
-        }
+        IoUtils.close(session);
+        session = null;
     }
 
     /**
@@ -67,18 +62,9 @@ public class SourceFromMySQL extends RichSourceFunction<Employee> {
      * @param sourceContext
      */
     @Override
-    public void run(SourceContext<Employee> sourceContext) throws SQLException {
-        ResultSet rs = ps.executeQuery();
-        Employee employee;
-        while (rs.next()) {
-            employee = new Employee();
-            employee.setId(rs.getLong("id"));
-            employee.setName(rs.getString("name"));
-            employee.setAge(rs.getInt("age"));
-            employee.setBirthday(rs.getDate("birthday"));
-            employee.setDeptId(rs.getInt("dept_id"));
-            sourceContext.collect(employee);
-        }
+    public void run(SourceContext<Employee> sourceContext) {
+        List<Employee> list = employeeMapper.findAll();
+        list.forEach(sourceContext::collect);
     }
 
     @Override

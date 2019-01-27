@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -12,7 +13,7 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Employee {
+public class Employee implements Serializable {
 
     /**
      *
@@ -35,5 +36,10 @@ public class Employee {
      */
     private int deptId;
 
-
+    public Employee(String name, int age, Date birthday, int deptId) {
+        this.name = name;
+        this.age = age;
+        this.birthday = birthday;
+        this.deptId = deptId;
+    }
 }
