@@ -1,7 +1,5 @@
 package com.iogogogo.persistent;
 
-import org.apache.ibatis.annotations.Param;
-
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
@@ -9,7 +7,7 @@ import java.util.List;
 /**
  * Created by tao.zeng on 2019/1/27.
  */
-public interface BaseMapper<PK extends Serializable, M extends Serializable> {
+public interface BaseMapper<M extends Serializable> {
 
     /**
      * 查询所有数据
@@ -24,7 +22,7 @@ public interface BaseMapper<PK extends Serializable, M extends Serializable> {
      * @param id
      * @return
      */
-    M findById(PK id);
+    M findById(Serializable id);
 
     /**
      * 保存数据
@@ -41,7 +39,7 @@ public interface BaseMapper<PK extends Serializable, M extends Serializable> {
      * @param batchSize
      * @return
      */
-    int batchSave(Collection<M> data, @Param("batchSize") int batchSize);
+    int batchSave(Collection<M> data, int batchSize);
 
     /**
      * 修改数据
@@ -57,5 +55,5 @@ public interface BaseMapper<PK extends Serializable, M extends Serializable> {
      * @param id
      * @return
      */
-    int delete(PK id);
+    int delete(Serializable id);
 }

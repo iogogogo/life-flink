@@ -25,7 +25,7 @@ public class KafkaSourceApp {
         props.put("key.serializer", KafkaConf$.MODULE$.keySerializer().get());
         //value 序列化
         props.put("value.serializer", KafkaConf$.MODULE$.valueSerializer().get());
-        props.put("zookeeper.connect",  KafkaConf$.MODULE$.zookeeperConnect().get());
+        props.put("zookeeper.connect", KafkaConf$.MODULE$.zookeeperConnect().get());
         props.put("group.id", "metric-group");
         //key 反序列化
         props.put("key.deserializer", KafkaConf$.MODULE$.keyDeserializer().get());

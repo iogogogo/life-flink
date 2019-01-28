@@ -5,11 +5,14 @@ import com.iogogogo.model.Employee;
 import com.iogogogo.persistent.SqlSessionFactoryHelper;
 import com.iogogogo.util.IoUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.flink.api.java.utils.ParameterTool;
 import org.apache.ibatis.session.SqlSession;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Date;
 
 /**
@@ -40,5 +43,16 @@ public class Test {
         int i = employeeMapper.save(employee);
         session.rollback();
         log.info("row count:{}", i);
+    }
+
+    @org.junit.Test
+    public void test1() throws IOException {
+        String[] args = {"--input hdfs:///mydata", "--elements 42"};
+        ParameterTool fromArgs = ParameterTool.fromArgs(args);
+        log.info("{}", fromArgs);
+
+        InputStream inputStream = ClassLoader.getSystemResourceAsStream("application.properties");
+        ParameterTool parameter = ParameterTool.fromPropertiesFile(inputStream);
+        log.info("{}", parameter);
     }
 }

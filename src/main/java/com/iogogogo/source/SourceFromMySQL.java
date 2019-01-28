@@ -2,8 +2,8 @@ package com.iogogogo.source;
 
 import com.iogogogo.mapper.EmployeeMapper;
 import com.iogogogo.model.Employee;
-import com.iogogogo.util.IoUtils;
 import com.iogogogo.persistent.SqlSessionFactoryHelper;
+import com.iogogogo.util.IoUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.functions.source.RichSourceFunction;
